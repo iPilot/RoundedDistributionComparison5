@@ -220,80 +220,80 @@ namespace RoundedDistributionComparison5
         
         private static int InitAndGetRemain(IReadOnlyList<double> elements, double multiplier, double sum, ref Span<DistributionElement<int>> span)
         {
-            var buffer = 0.0;
+            var remain = 0.0;
             for (var i = 0; i < elements.Count; i++)
             {
                 span[i] = new DistributionElement<int>(i, elements[i] * multiplier / sum);
-                buffer += span[i].Remain;
+                remain += span[i].Remain;
             }
 
-            return (int)Math.Round(buffer);
+            return (int)Math.Round(remain);
         }
 
         private static int InitAndGetRemain(IReadOnlyList<int> elements, double multiplier, double sum, ref Span<DistributionElement<int>> span)
         {
-            var buffer = 0.0;
+            var remain = 0.0;
             for (var i = 0; i < elements.Count; i++)
             {
                 span[i] = new DistributionElement<int>(i, elements[i] * multiplier / sum);
-                buffer += span[i].Remain;
+                remain += span[i].Remain;
             }
 
-            return (int)Math.Round(buffer);
+            return (int)Math.Round(remain);
         }
 
         private static int InitAndGetRemain(IReadOnlyList<long> elements, double multiplier, double sum, ref Span<DistributionElement<int>> span)
         {
-            var buffer = 0.0;
+            var remain = 0.0;
             for (var i = 0; i < elements.Count; i++)
             {
                 span[i] = new DistributionElement<int>(i, elements[i] * multiplier / sum);
-                buffer += span[i].Remain;
+                remain += span[i].Remain;
             }
 
-            return (int)Math.Round(buffer);
+            return (int)Math.Round(remain);
         }
 
         private static int InitAndGetRemain(IReadOnlyDictionary<TKey, double> elements, double multiplier, double sum, ref Span<DistributionElement<TKey>> span)
         {
-            var buffer = 0.0;
+            var remain = 0.0;
             var i = 0;
             foreach (var (key, element) in elements)
             {
                 span[i] = new DistributionElement<TKey>(key, element * multiplier / sum);
-                buffer += span[i].Remain;
+                remain += span[i].Remain;
                 i++;
             }
 
-            return (int)Math.Round(buffer);
+            return (int)Math.Round(remain);
         }
 
         private static int InitAndGetRemain(IReadOnlyDictionary<TKey, int> elements, double multiplier, double sum, ref Span<DistributionElement<TKey>> span)
         {
-            var buffer = 0.0;
+            var remain = 0.0;
             var i = 0;
             foreach (var (key, element) in elements)
             {
                 span[i] = new DistributionElement<TKey>(key, element * multiplier / sum);
-                buffer += span[i].Remain;
+                remain += span[i].Remain;
                 i++;
             }
 
-            return (int)Math.Round(buffer);
+            return (int)Math.Round(remain);
         }
 
         private static int InitAndGetRemain(IReadOnlyDictionary<TKey, long> elements, double multiplier, double sum, ref Span<DistributionElement<TKey>> span)
         {
-            var buffer = 0.0;
+            var remain = 0.0;
             var i = 0;
             foreach (var (key, element) in elements)
             {
                 span[i] = new DistributionElement<TKey>(key, element * multiplier / sum);
-                buffer += span[i].Remain;
+                remain += span[i].Remain;
                 i++;
             }
 
-            return (int)Math.Round(buffer);
+            return (int)Math.Round(remain);
         }
     }
 }
