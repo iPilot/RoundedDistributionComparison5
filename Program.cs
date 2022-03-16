@@ -14,55 +14,41 @@ namespace RoundedDistributionComparison5
             var d0 = RoundedDistribution.Create(EnumLongData);
             var d1 = RoundedDistribution2<DataTypes>.Create(EnumLongData);
 
-            MeasureFirstImpl();
+            Benchmark(FirstImpl);
+            Benchmark(NewImpl);
+        }
+
+        private static void Benchmark(Action action)
+        {
+            var total = 0.0;
+            var stopWatch = new Stopwatch();
+
+            for (var i = 0; i < Count; i++)
+            {
+                stopWatch.Start();
+
+                action();
+
+                stopWatch.Stop();
+
+                total += stopWatch.ElapsedTicks;
+                stopWatch.Reset();
+            }
+
+            total /= Ticks;
+
+            Console.WriteLine($"Total: {total:#.00}{Environment.NewLine}Average: {total / Count:##.00} mcs");
             Console.WriteLine();
-            MeasureNewImpl();
         }
 
-        private static void MeasureFirstImpl()
+        private static void FirstImpl()
         {
-            var total = 0.0;
-            var stopWatch = new Stopwatch();
-            Dictionary<DataTypes, int> d0 = null;
-
-            for (var i = 0; i < Count; i++)
-            {
-                stopWatch.Start();
-
-                d0 = RoundedDistribution.Create(EnumLongData).AsIntegerPercents();
-
-                stopWatch.Stop();
-
-                total += stopWatch.ElapsedTicks;
-                stopWatch.Reset();
-            }
-
-            total /= Ticks;
-
-            Console.WriteLine($"Total: {total:#.00}{Environment.NewLine}Average: {total / Count:##.00} mcs");
+            var d0 = RoundedDistribution.Create(EnumLongData).AsIntegerPercents();
         }
 
-        private static void MeasureNewImpl()
+        private static void NewImpl()
         {
-            var total = 0.0;
-            var stopWatch = new Stopwatch();
-            IReadOnlyDictionary<DataTypes, double> d0;
-
-            for (var i = 0; i < Count; i++)
-            {
-                stopWatch.Start();
-
-                d0 = RoundedDistribution2<DataTypes>.Create(EnumLongData);
-
-                stopWatch.Stop();
-
-                total += stopWatch.ElapsedTicks;
-                stopWatch.Reset();
-            }
-
-            total /= Ticks;
-
-            Console.WriteLine($"Total: {total:#.00}{Environment.NewLine}Average: {total / Count:##.00} mcs");
+            var d0 = RoundedDistribution2<DataTypes>.Create(EnumLongData);
         }
 
         private static readonly Dictionary<DataTypes, int> EnumIntData = new()
@@ -74,15 +60,52 @@ namespace RoundedDistributionComparison5
             { DataTypes.Fifth, 457 }
         };
 
-        private static readonly Dictionary<int, int> IntIntData = new()
+        private static readonly Dictionary<DataTypes, double> EnumDoubleData = new()
         {
-            { 0, 100 },
-            { 1, 200 },
-            { 2, 300 },
-            { 3, 600 }
+            { DataTypes.First, 1247.32 },
+            { DataTypes.Second, 42365.13 },
+            { DataTypes.Third, 32332.243 },
+            { DataTypes.Fourth, 12982.112 },
+            { DataTypes.Fifth, 22223.125 }
         };
 
-        private static Dictionary<long, int> _longIntData = new()
+        private static readonly Dictionary<DataTypes, long> EnumLongData = new()
+        {
+            { DataTypes.First, 146_000_000_000 },
+            { DataTypes.Second, 123_000_000_000 },
+            { DataTypes.Third, 323_000_000_000 },
+            { DataTypes.Fourth, 982_000_000_000 },
+            { DataTypes.Fifth, 457_000_000_000 }
+        };
+
+        private static readonly Dictionary<int, int> IntIntData = new()
+        {
+            { 0, 146 },
+            { 1, 123 },
+            { 2, 323 },
+            { 3, 982 },
+            { 4, 457 }
+        };
+
+        private static readonly Dictionary<int, double> IntDoubleData = new()
+        {
+            { 0, 1247.32 },
+            { 1, 42365.13 },
+            { 2, 32332.243 },
+            { 3, 12982.112 },
+            { 4, 22223.125 }
+        };
+
+        private static readonly Dictionary<int, long> IntLongData = new()
+        {
+            { 0, 146_000_000_000 },
+            { 1, 123_000_000_000 },
+            { 2, 323_000_000_000 },
+            { 3, 982_000_000_000 },
+            { 4, 457_000_000_000 }
+        };
+
+        private static readonly Dictionary<long, int> LongIntData = new()
         {
             { 0, 0 },
             { 1, 1_000_000 },
@@ -93,39 +116,15 @@ namespace RoundedDistributionComparison5
             { 6, 3_000_000 }
         };
 
-        private static readonly Dictionary<DataTypes, long> EnumLongData = new()
-        {
-            { DataTypes.First, 146 },
-            { DataTypes.Second, 123 },
-            { DataTypes.Third, 323 },
-            { DataTypes.Fourth, 982 },
-            { DataTypes.Fifth, 457 }
-        };
-
-        private static readonly Dictionary<int, long> IntLongData = new()
-        {
-
-        };
-
         private static readonly Dictionary<long, long> LongLongData = new()
         {
-
+            { 0, 146_000_000_000 },
+            { 1, 123_000_000_000 },
+            { 2, 323_000_000_000 },
+            { 3, 982_000_000_000 },
+            { 4, 457_000_000_000 }
         };
-
-        private static readonly Dictionary<DataTypes, double> EnumDoubleData = new()
-        {
-            { DataTypes.First, 1247.32 },
-            { DataTypes.Second, 42365.13 },
-            { DataTypes.Third, 32332.243 },
-            { DataTypes.Fourth, 12982.112 },
-            { DataTypes.Fifth, 22223.125 }
-        };
-
-        private static readonly Dictionary<int, double> IntDoubleData = new()
-        {
-
-        };
-
+        
         private static readonly Dictionary<long, double> LongDoubleData = new()
         {
             { 0, 1247.32 },
