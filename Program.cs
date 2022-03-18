@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace RoundedDistributionComparison5
 {
@@ -9,6 +10,8 @@ namespace RoundedDistributionComparison5
         private const int Count = 1_000_000;
         private const long Ticks = TimeSpan.TicksPerMillisecond / 1000;
 
+        private static readonly Dictionary<DataTypes, double> Result = new(6);
+
         public static void Main()
         {
             var d0 = RoundedDistribution.Create(EnumLongData);
@@ -16,18 +19,20 @@ namespace RoundedDistributionComparison5
 
             Benchmark(FirstImpl);
             Benchmark(NewImpl);
+            Benchmark(NewImplNoAllocation);
         }
 
-        private static void Benchmark(Action action)
+        private static void Benchmark(Func<IDictionary<DataTypes, double>> action)
         {
             var total = 0.0;
             var stopWatch = new Stopwatch();
+            IDictionary<DataTypes, double> result = null;
 
             for (var i = 0; i < Count; i++)
             {
                 stopWatch.Start();
 
-                action();
+                result = action();
 
                 stopWatch.Stop();
 
@@ -38,17 +43,23 @@ namespace RoundedDistributionComparison5
             total /= Ticks;
 
             Console.WriteLine($"Total: {total:#.00}{Environment.NewLine}Average: {total / Count:##.00} mcs");
+            Console.WriteLine(string.Join(" ", result?.Select(r => $"{r.Key}:{r.Value:0}")));
             Console.WriteLine();
         }
 
-        private static void FirstImpl()
+        private static IDictionary<DataTypes, double> FirstImpl()
         {
-            var d0 = RoundedDistribution.Create(EnumLongData).AsIntegerPercents();
+            return RoundedDistribution.Create(EnumLongData).AsPercents();
         }
 
-        private static void NewImpl()
+        private static IDictionary<DataTypes, double> NewImpl()
         {
-            var d0 = RoundedDistribution2<DataTypes>.Create(EnumLongData);
+            return RoundedDistribution2<DataTypes>.Create(EnumLongData);
+        }
+
+        private static IDictionary<DataTypes, double> NewImplNoAllocation()
+        {
+            return RoundedDistribution2<DataTypes>.Create(EnumLongData, Result);
         }
 
         private static readonly Dictionary<DataTypes, int> EnumIntData = new()

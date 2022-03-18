@@ -2,25 +2,33 @@
 
 namespace RoundedDistributionComparison5
 {
-    internal struct DistributionElement<T>
+    public struct DistributionElement<T>
         where T : unmanaged
     {
-        internal readonly T Key;
-        internal readonly double Remain;
-        internal int Percent;
+        public T Key;
+        public double Remain;
+        public int Percent;
 
-        internal DistributionElement(T key, double percent)
+        public DistributionElement(T key, double percent)
         {
             Key = key;
             Percent = (int)Math.Truncate(percent);
             Remain = percent - Percent;
         }
 
-        private DistributionElement(T key, int percent)
+        public DistributionElement(T key, int percent)
         {
             Remain = 0;
             Key = key;
             Percent = percent;
+        }
+
+        public double InitAndGetRemain(T key, double value)
+        {
+            Key = key;
+            Percent = (int)value;
+            Remain = value - Percent;
+            return Remain;
         }
 
         public DistributionElement<T> DecreasePercent() => new(Key, Percent - 1);
