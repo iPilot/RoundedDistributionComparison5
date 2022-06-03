@@ -15,7 +15,7 @@ namespace RoundedDistributionComparison5
         public static void Main()
         {
             var d0 = RoundedDistribution.Create(EnumLongData);
-            var d1 = RoundedDistribution2<DataTypes>.Create(EnumLongData);
+            var d1 = RoundedDistributionV2<DataTypes>.Create(EnumLongData);
 
             Benchmark(FirstImpl);
             Benchmark(NewImpl);
@@ -42,7 +42,7 @@ namespace RoundedDistributionComparison5
 
             total /= Ticks;
 
-            Console.WriteLine($"Total: {total:#.00}{Environment.NewLine}Average: {total / Count:##.00} mcs");
+            Console.WriteLine($"Total: {total:#.00}{Environment.NewLine}Average: {total / Count:0.00} mcs");
             Console.WriteLine(string.Join(" ", result?.Select(r => $"{r.Key}:{r.Value:0}")));
             Console.WriteLine();
         }
@@ -54,12 +54,12 @@ namespace RoundedDistributionComparison5
 
         private static IDictionary<DataTypes, double> NewImpl()
         {
-            return RoundedDistribution2<DataTypes>.Create(EnumLongData);
+            return RoundedDistributionV2<DataTypes>.Create(EnumLongData);
         }
 
         private static IDictionary<DataTypes, double> NewImplNoAllocation()
         {
-            return RoundedDistribution2<DataTypes>.Create(EnumLongData, Result);
+            return RoundedDistributionV2<DataTypes>.Create(EnumLongData, Result);
         }
 
         private static readonly Dictionary<DataTypes, int> EnumIntData = new()
